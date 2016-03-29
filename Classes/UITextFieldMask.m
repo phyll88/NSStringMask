@@ -73,9 +73,10 @@
         {
             newRange.location += newRange.length;
         }
-        
-        newRange.length = 0;
+    } else {
+        newRange = [mutableString rangeOfString:self.mask.placeholder];
     }
+    newRange.length = 0;
     
     textField.text = mutableString;
     [textField setValue:[NSValue valueWithRange:newRange] forKey:@"selectionRange"];
@@ -89,6 +90,28 @@
     {
         [self._extension textFieldDidBeginEditing:textField];
     }
+    
+    NSString *clean = [self.mask validCharactersForString:textField.text];
+    
+    NSRange newRange = NSMakeRange(0, 0);
+    if (clean.length > 0)
+    {
+        newRange = [textField.text rangeOfString:[clean substringFromIndex:clean.length-1] options:NSBackwardsSearch];
+        if (newRange.location == NSNotFound)
+        {
+            newRange.location = textField.text.length;
+        }
+        else
+        {
+            newRange.location += newRange.length;
+        }
+    } else {
+        newRange = [textField.text rangeOfString:self.mask.placeholder];
+    }
+    
+    newRange.length = 0;
+    
+    [textField setValue:[NSValue valueWithRange:newRange] forKey:@"selectionRange"];
 }
 
 - (void)textFieldDidEndEditing:(UITextField *)textField
