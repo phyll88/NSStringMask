@@ -41,7 +41,7 @@
 {
     _mask = mask;
     
-    [super setDelegate:(mask ? self : nil)];
+    [super setDelegate:(mask ? self : self._extension)];
 }
 
 #pragma mark - UITextFieldDelegate
